@@ -42,12 +42,12 @@ jobs:
       #     NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
       #     NPM_CONFIG_PROVENANCE: true
 
-      # - name: Publish to VSCE & OVSX
-      #   run: npm run publish
-      #   working-directory: ./packages/gpt-runner-vscode
-      #   env:
-      #     VSCE_TOKEN: ${{secrets.VSCE_TOKEN}}
-      #     OVSX_TOKEN: ${{secrets.OVSX_TOKEN}}
+      - name: Publish to VSCE & OVSX
+        run: npm --version
+        working-directory: ./packages/gpt-runner-vscode
+        env:
+          VSCE_TOKEN: ${{secrets.VSCE_TOKEN}}
+          OVSX_TOKEN: ${{secrets.OVSX_TOKEN}}
 
 
       # Setup Java 11 environment for the next steps
@@ -68,7 +68,7 @@ jobs:
       #   run: ./gradlew publishPlugin
 
       - name: Publish Plugin
-        working-directory: ./packages/gpt-runner-intellij
+        working-directory: ../gpt-runner-intellij
         run: ./gradlew buildPlugin
 
       # Upload artifact as a release asset
