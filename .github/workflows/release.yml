@@ -1,8 +1,9 @@
 name: Release
 
 on:
-  release:
-    types: [prereleased, released]
+  push:
+    tags:
+      - 'v*'
 
 jobs:
   release:
@@ -66,6 +67,13 @@ jobs:
       #     PRIVATE_KEY_PASSWORD: ${{ secrets.PRIVATE_KEY_PASSWORD }}
       #   run: ./gradlew publishPlugin
 
+      - name: Branch name
+        id: branch_name
+        run: |
+          echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
+          echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+
       - name: Publish Plugin
         working-directory: ./packages/gpt-runner-intellij
         run: chmod +x gradlew && ./gradlew buildPlugin
@@ -74,4 +82,5 @@ jobs:
       - name: Upload Release Asset
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload ${{ github.event.release.tag_name }} ./build/libs/*
+        working-directory: ./packages/gpt-runner-intellij
+        run: gh release upload ${{ steps.branch_name.outputs.SOURCE_TAG }} ./build/libs/*
