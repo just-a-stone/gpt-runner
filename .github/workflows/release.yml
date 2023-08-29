@@ -68,7 +68,7 @@ jobs:
       #   run: ./gradlew publishPlugin
 
       - name: Publish Plugin
-        working-directory: ../gpt-runner-intellij
+        working-directory: ./packages/gpt-runner-intellij
         run: ./gradlew buildPlugin
 
       # Upload artifact as a release asset
